@@ -21,21 +21,21 @@ const qaItems = [
   },
 ];
 
-const accordianDiv = document.getElementById("accordian");
+const accordionDiv = document.getElementById("accordion");
 
 qaItems.forEach((qaItem) => {
   const questionText = qaItem.question;
   const answerText = qaItem.answer;
 
   const questionDiv = document.createElement("div");
-  questionDiv.classList.add = "accordian-question";
+  questionDiv.classList.add = "accordion-question";
   questionDiv.textContent = questionText;
 
   const answerDiv = document.createElement("div");
-  answerDiv.classListx.add("accordian-answer");
+  answerDiv.classListx.add("accordion-answer");
   answerDiv.textContent = answerText;
 
   questionDiv.appendChild(answerDiv);
 
-  accordianDiv.appendChild(questionDiv);
+  accordionDiv.appendChild(questionDiv);
 });
