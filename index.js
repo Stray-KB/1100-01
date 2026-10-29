@@ -26,4 +26,16 @@ const accordianDiv = document.getElementById("accordian");
 qaItems.forEach((qaItem) => {
   const questionText = qaItem.question;
   const answerText = qaItem.answer;
+
+  const questionDiv = document.createElement("div");
+  questionDiv.classList.add = "accordian-question";
+  questionDiv.textContent = questionText;
+
+  const answerDiv = document.createElement("div");
+  answerDiv.classListx.add("accordian-answer");
+  answerDiv.textContent = answerText;
+
+  questionDiv.appendChild(answerDiv);
+
+  accordianDiv.appendChild(questionDiv);
 });
