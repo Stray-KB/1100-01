@@ -20,3 +20,10 @@ const qaItems = [
       "Yes, there are certain restrictions on items that can be shipped due to safety and legal reasons. Please refer to our shipping policy or contact us for more information on prohibited items.",
   },
 ];
+
+const accordianDiv = document.getElementById("accordian");
+
+qaItems.forEach((qaItem) => {
+  const questionText = qaItem.question;
+  const answerText = qaItem.answer;
+});
