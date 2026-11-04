@@ -72,17 +72,17 @@
                 <div class="input-row">
                     <div class="input-group">
                         <label for="first-name">First Name</label>
-                        <input type="first-name" placeholder="Enter your First name" required/>
+                        <input id="first-name" type="first-name" placeholder="Enter your First name" required/>
                     </div>
                     <div class="input-group">
                         <label for="last-name">Last Name</label>
-                        <input type="last-name" placeholder="Enter your Last name" required/>
+                        <input id="last-name" type="last-name" placeholder="Enter your Last name" required/>
                     </div>
                 </div>
 
                 <div class="input-row">
                     <div class="input-group">
-                       <label for="first-name">Subject</label> 
+                       <label for="subject">Subject</label> 
                        <select id="subject">
                             <option value="general" selected>General</option>
                             <option value="delivery" selected>Delivery</option>
@@ -91,16 +91,23 @@
                     </div>
                     <div class="input-group">
                         <label for="email">Email</label>
-                        <input name ="email" type="text" placeholder="Enter your email" required>
+                        <input id="email" type="text" placeholder="Enter your email" required>
                     </div>
                 </div>
 
-                <div class="input-group"></div>
+                <div class="input-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Enter a message" required></textarea>
+                </div>
+
+                <button>Submit</button>
             </form>
         </section>
 
     </main>
-    <footer></footer>
+    <footer>
+        <p>© Cacher's Deliveries 2024</p>
+    </footer>
 </body>
 
 </html>
