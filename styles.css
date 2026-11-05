@@ -1,0 +1,21 @@
+body{
+  font-family: "Geist Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+h1, h2, h3 {
+  font-family: "Redaction 50", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
