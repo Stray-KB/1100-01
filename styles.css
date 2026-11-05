@@ -12,6 +12,8 @@ h1, h2, h3 {
   font-style: normal;
 }
 
+/* Main Font CSS /|\ */
+/* Navbar CSS \|/ */
 header {
     position: sticky;
     top: 0;
@@ -71,6 +73,9 @@ nav ul li a:hover {
    text-decoration: underline;
 }
 
+/* Navbar CSS /|\ */
+/* Hero CSS \|/ */
+
 #hero {
     height: 50vh;
     width: 100%;
@@ -120,4 +125,39 @@ nav ul li a:hover {
 .hero-content button:hover {
     color: white;
     background: #c07b0c;
+}
+
+/* Hero CSS /|\ */
+/* Marketing CSS \|/ */
+
+#marketing-materials {
+    background: #f6f6f6;
+    padding: 4rem 0;
+    align-items: center;
+}
+
+.card-class {
+    width: 100%;
+    max-width: 1200px;
+    height: 300px;
+    display: flex;
+    margin: 4rem auto;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 15px;
+    box-shadow: 0 0 10px 0 black;
+}
+
+.card img {
+    width: 400px;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-text {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
 }
