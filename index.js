@@ -29,7 +29,7 @@ qaItems.forEach((qaItem) => {
   const answerText = qaItem.answer;
 
   const questionDiv = document.createElement("div");
-  questionDiv.classList.add = "accordion-question";
+  questionDiv.classList.add("accordion-question");
   questionDiv.textContent = questionText;
 
   const answerDiv = document.createElement("div");
