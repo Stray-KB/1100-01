@@ -182,7 +182,7 @@ nav ul li a:hover {
 }
 
 .accordion-question {
-    background-color: white;
+    background-color: #ffffff;
     color: #915d0a;
     cursor: pointer;
     padding: 15px;
@@ -207,7 +207,7 @@ nav ul li a:hover {
 .accordion-answer {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25 ease;
+    transition: max-height 0.25s ease;
     background-color: #ffffff;
     font-weight: 300;
     margin: 10px;
