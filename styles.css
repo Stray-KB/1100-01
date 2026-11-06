@@ -161,3 +161,22 @@ nav ul li a:hover {
     justify-content: center;
 
 }
+
+/* questions section */
+#questions {
+    padding: 4rem 0;
+}
+
+#questions h2 {
+    margin: 0rem auto 2rem auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+#accordian {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+}

@@ -23,6 +23,7 @@ const qaItems = [
 
 const accordionDiv = document.getElementById("accordion");
 
+
 qaItems.forEach((qaItem) => {
   const questionText = qaItem.question;
   const answerText = qaItem.answer;
@@ -36,6 +37,11 @@ qaItems.forEach((qaItem) => {
   answerDiv.textContent = answerText;
 
   questionDiv.appendChild(answerDiv);
+
+  questionDiv.addEventListener("click", () => {
+    questionDiv.classList.toggle("active");
+    answerDiv.classList.toggle("active");
+  })
 
   accordionDiv.appendChild(questionDiv);
 });
