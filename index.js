@@ -151,7 +151,6 @@ class SessionStorageProductDAO extends ProductDAO {
 class CookieStorageProductDAO extends ProductDAO {
   constructor(){
     super();
-    this.database = document.cookie;
   }
 
   getAll() {
@@ -186,12 +185,30 @@ class SessionStorageDeliveryDAO extends DeliveryDAO {
     });
   }
 
-  update(delivery){
+  create(delivery){ //??????????????????????
     const deliveries = this.getAll();
     deliveries.push(delivery);
     this.database.setItem("deliveries", JSON.stringify(deliveries));
   }
 }
+
+ class CookieStorageDeliveryDAO extends DeliveryDAO{
+  getAll() {
+    const cookieValue = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("deliveries"))
+    ?.split("=")[1];
+
+    const deliveriesData = cookieValue ? JSON.parse(cookieValue) : [];
+    return deliveriesData.map((deliveryData) => new Delivery(deliveryData));
+  }
+
+  create(delivery){
+    const existingDeliveries = this.getAll();
+    existingDeliveries.push(delivery)
+    document.cookie = `deliveries=${JSON.stringify(existingDeliveries)};`;
+  }
+} 
 
 class CreateDeliveryService {
   constructor(productDAO, deliveryDAO) {
@@ -209,14 +226,17 @@ createDelivery(productName, quantity, address, scheduledTime) {
     address,
     scheduledTime
   };
-  this.deliveryDAO.update(Delivery.create(deliveryData));
+  this.deliveryDAO.create(Delivery.create(deliveryData));
   this.productDAO.update(product);
  }
 }
 
-/* const deliveryDAO = new SessionStorageDeliveryDAO(); */
-const deliveryDAO = new SessionStorageDeliveryDAO();
-const productDAO = new SessionStorageProductDAO();
+//const deliveryDAO = new SessionStorageDeliveryDAO();
+const deliveryDAO = new CookieStorageDeliveryDAO();
+
+// const productDAO = new SessionStorageProductDAO();
+const productDAO = new CookieStorageProductDAO();
+
 const createDeliveryService = new CreateDeliveryService(productDAO, deliveryDAO);
 
 const deliveryList = document.getElementById("deliveries-list");
