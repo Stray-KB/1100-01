@@ -72,11 +72,18 @@
         </section>
 
         <section id="deliveries">
-            <ul deliveries-ist>
-
-            </ul>
+            <h2>Deliveries</h2>
+            <ul id="deliveries-list"></ul>
             <form>
-
+                <label for="address">Address</label>
+                <input type="text" name="address" />
+                <label for="scheduledTime">Scheduled Time</label>
+                <input type="date" name="scheduledTime" />
+                <label for="productName">Product:</label>
+                <select name="productName"></select>
+                <label for="quantity">Quantity</label>
+                <input type="number" name="quantity" />
+                <button type="submit">Create Delivery</button>
             </form>
         </section>
 

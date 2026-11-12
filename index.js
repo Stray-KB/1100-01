@@ -52,22 +52,27 @@ class DatabaseObject {
   }
 }
 
-class Product {
-  constructor(name, inventory) {}
+class Product extends DatabaseObject {
+  constructor(name, inventory) {
+    super();
+    this.name = name;
+    this.inventory = inventory;
+  }
 
   toString() {
-    return `${this.name}: ${inventory} left in stock`;
+    return `${this.name}: ${this.inventory} left in stock`;
   }
 
 }
 
-class Delivery {
+class Delivery extends DatabaseObject {
   constructor(params) {
+    super();
     const {address, scheduledTime, product, quantity} = params
     this.address = address;
     this.scheduledTime = scheduledTime;
     this.product = product;
-    this.quantity;
+    this.quantity = quantity;
   }
 
   static create(params) {
@@ -75,7 +80,7 @@ class Delivery {
   }
 
   toString() {
-    return `Delivering ${quantity} of ${product} to ${address} at ${scheduledTime}`;
+    return `Delivering ${this.quantity} of ${this.product.name} to ${this.address} at ${this.scheduledTime}`;
   }
 }
 
@@ -110,21 +115,22 @@ class ProductDAO {
 
 class SessionStorageProductDAO extends ProductDAO {
   constructor() {
+    super();
     this.database = sessionStorage;
   }
 
   getAll() {
     const productsAsJSON = this.database.getItem("products");
     const productsData = productsAsJSON ? JSON.parse(productsAsJSON) : ProductDAO.seeds;
-    return productsData.map((productsData) => {
-      const { name, inventory } = productsData
-      new Product(name, inventory)
+    return productsData.map((productData) => {
+      const { name, inventory } = productData;
+      return new Product(name, inventory);
     })
   }
 
   getProductByName(name) {
     const products = this.getAll();
-    return products.find(product => product.name == name)
+    return products.find(product => product.name == name);
   }
 
   update(product) {
@@ -136,6 +142,7 @@ class SessionStorageProductDAO extends ProductDAO {
 
 class CookieStorageProductDAO extends ProductDAO {
   constructor(){
+    super();
     this.database = document.cookie;
   }
 
@@ -156,19 +163,20 @@ class DeliveryDAO {
     throw new Error("Not implemented")
   }
 
-  update() {
+  update(delivery) {
     throw new Error("Not implemented")
   }
 }
 
 class SessionStorageDeliveryDAO extends DeliveryDAO {
   constructor(){
+    super();
     this.database = sessionStorage;
   }
 
   getAll(){
-    const deliveriesAsJSON = this.database.getItem("deliveries");
-    const deliveriesData = JSON.parse(deliveriesAsJSON);
+    const deliveriesInSessionStorage = this.database.getItem("deliveries");
+    const deliveriesData = deliveriesInSessionStorage ? JSON.parse(deliveriesInSessionStorage) : [];
     return deliveriesData.map((deliveryData) => {
       return Delivery.create(deliveryData)
     });
@@ -183,11 +191,12 @@ class SessionStorageDeliveryDAO extends DeliveryDAO {
 
 class CreateDeliveryService {
   constructor(productDAO, deliveryDAO) {
-
+    this.productDAO = productDAO;
+    this.deliveryDAO = deliveryDAO;
   }
 
 CreateDelivery(productName, quantity, address, scheduledTime) {
-  const product = productDAO.getProductByName(productName);
+  const product = this.productDAO.getProductByName(productName);
   const newInventory = product.inventory - quantity;
   product.inventory = newInventory;
   const deliveryData = {
@@ -196,14 +205,14 @@ CreateDelivery(productName, quantity, address, scheduledTime) {
     address,
     scheduledTime
   };
-  deliveryDAO.create(deliveryData);
-  productDAO.update(product);
+  this.deliveryDAO.update(Delivery.create(deliveryData));
+  this.productDAO.update(product);
  }
 }
 
 const deliveryDAO = new SessionStorageDeliveryDAO();
 const productDAO = new SessionStorageProductDAO();
-const CreateDeliveryService = new CreateDeliveryService(productDAO, deliveryDAO);
+const createDeliveryService = new CreateDeliveryService(productDAO, deliveryDAO);
 
 const deliveryList = document.getElementById("deliveries-list");
 const deliveries = deliveryDAO.getAll();
@@ -211,5 +220,15 @@ for(let i = 0; i < deliveries.length; i++){
   const delivery = deliveries[i];
   const deliveryLi = document.createElement("li");
   deliveryLi.textContent = delivery.toString();
-  deliveryList.appendChild(deliveryLi)
+  deliveryList.appendChild(deliveryLi);
+}
+
+const productNameSelect = document.querySelector("#deliveries form select");
+const products = productDAO.getAll();
+for(let i = 0; i < products.length; i++) {
+  const product = products[i];
+  const option = document.createElement("option");
+  option.innerText = product.toString();
+  option.setAttribute("value", product.name);
+  productNameSelect.appendChild(option);
 }
