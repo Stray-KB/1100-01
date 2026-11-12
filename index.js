@@ -45,3 +45,171 @@ qaItems.forEach((qaItem) => {
 
   accordionDiv.appendChild(questionDiv);
 });
+
+class DatabaseObject {
+  toString() {
+    throw new Error("Not implemented");
+  }
+}
+
+class Product {
+  constructor(name, inventory) {}
+
+  toString() {
+    return `${this.name}: ${inventory} left in stock`;
+  }
+
+}
+
+class Delivery {
+  constructor(params) {
+    const {address, scheduledTime, product, quantity} = params
+    this.address = address;
+    this.scheduledTime = scheduledTime;
+    this.product = product;
+    this.quantity;
+  }
+
+  static create(params) {
+    return new Delivery(params)
+  }
+
+  toString() {
+    return `Delivering ${quantity} of ${product} to ${address} at ${scheduledTime}`;
+  }
+}
+
+class ProductDAO {
+  static seeds = [
+    {
+      name: "Apples",
+      inventory: 100,
+    },
+    {
+      name: "Bananas",
+      inventory: 50,
+    },
+    {
+      name: "Peaches",
+      inventory: 70,
+    },
+  ];
+
+  getAll() {
+    throw new Error("Not Implemented");
+  }
+
+  getProductByName(name) {
+    throw new Error("not implemented")
+  }
+
+  update(product) {
+    throw new Error("Not Implemented");
+  }
+}
+
+class SessionStorageProductDAO extends ProductDAO {
+  constructor() {
+    this.database = sessionStorage;
+  }
+
+  getAll() {
+    const productsAsJSON = this.database.getItem("products");
+    const productsData = productsAsJSON ? JSON.parse(productsAsJSON) : ProductDAO.seeds;
+    return productsData.map((productsData) => {
+      const { name, inventory } = productsData
+      new Product(name, inventory)
+    })
+  }
+
+  getProductByName(name) {
+    const products = this.getAll();
+    return products.find(product => product.name == name)
+  }
+
+  update(product) {
+    const existingProducts = this.getAll();
+    const indexToDelete = existingProducts.findIndex((productInList) => productInList.name == product.name);
+    existingProducts.splice(indexToDelete, 1, product);
+  }
+}
+
+class CookieStorageProductDAO extends ProductDAO {
+  constructor(){
+    this.database = document.cookie;
+  }
+
+  getAll() {
+    const productsAsJSON = this.database.getItem("products");
+    return productsAsJSON ? JSON.parse(productsAsJSON) : [];
+  }
+
+  update(product) {
+    const existingProducts = this.getAll();
+    const indexToDelete = existingProducts.findIndex((productInList) => productInList.name == product.name);
+    existingProducts.splice(indexToDelete, 1, product);
+  }
+}
+
+class DeliveryDAO {
+  getAll() {
+    throw new Error("Not implemented")
+  }
+
+  update() {
+    throw new Error("Not implemented")
+  }
+}
+
+class SessionStorageDeliveryDAO extends DeliveryDAO {
+  constructor(){
+    this.database = sessionStorage;
+  }
+
+  getAll(){
+    const deliveriesAsJSON = this.database.getItem("deliveries");
+    const deliveriesData = JSON.parse(deliveriesAsJSON);
+    return deliveriesData.map((deliveryData) => {
+      return Delivery.create(deliveryData)
+    });
+  }
+
+  update(delivery){
+    const deliveries = this.getAll();
+    deliveries.push(delivery);
+    this.database.setItem("deliveries", JSON.stringify(deliveries));
+  }
+}
+
+class CreateDeliveryService {
+  constructor(productDAO, deliveryDAO) {
+
+  }
+
+CreateDelivery(productName, quantity, address, scheduledTime) {
+  const product = productDAO.getProductByName(productName);
+  const newInventory = product.inventory - quantity;
+  product.inventory = newInventory;
+  const deliveryData = {
+    product,
+    quantity,
+    address,
+    scheduledTime
+  };
+  deliveryDAO.create(deliveryData);
+  productDAO.update(product);
+ }
+}
+
+const deliveryDAO = new SessionStorageDeliveryDAO();
+const productDAO = new SessionStorageProductDAO();
+const CreateDeliveryService = new CreateDeliveryService(productDAO, deliveryDAO);
+
+const deliveryList = document.getElementById("deliveries-list");
+const deliveries = deliveryDAO.getAll();
+for(let i = 0; i < deliveries.length; i++){
+  const delivery = deliveries[i];
+  const deliveryLi = document.createElement("li");
+  deliveryLi.textContent = delivery.toString();
+  deliveryList.appendChild(deliveryLi)
+}
